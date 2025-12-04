@@ -41,7 +41,7 @@ def send_to_rabbitmq(queue_name, data):
         )
         channel = connection.channel()
 
-        channel.queue_declare(queue=queue_name)
+        channel.queue_declare(queue=queue_name, durable=True)
 
         channel.basic_publish(
             exchange="",
