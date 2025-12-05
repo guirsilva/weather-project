@@ -57,7 +57,20 @@ func main() {
 		for msg := range msgs {
 			log.Printf("Received message: %s", msg.Body)
 
-			time.Sleep(2 * time.Second)
+			maxRetries := 3
+			var lastErr error
+
+			for attempt := 1; attempt <= maxRetries; attempt++ {
+				log.Printf("Attempt %d/%d", attempt, maxRetries)
+				time.Sleep(2 * time.Second)
+
+				lastErr = nil
+				break
+			}
+
+			if lastErr != nil {
+				log.Printf("Message failed after retries: %v", lastErr)
+			}
 
 			if err := msg.Ack(false); err != nil {
 				log.Printf("Ack error: %v", err)
